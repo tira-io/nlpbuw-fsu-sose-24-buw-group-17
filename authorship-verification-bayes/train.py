@@ -27,5 +27,5 @@ if __name__ == "__main__":
     model.fit(X_train, y_train)
 
     # Save the model
-    dump(model, "model.joblib")
+    dump(model, "/workspaces/nlpbuw-fsu-sose-24-buw-group-17/authorship-verification-bayes/model.joblib")
 
