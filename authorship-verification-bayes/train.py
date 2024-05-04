@@ -15,6 +15,7 @@ def load_data(dataset_name):
 
 if __name__ == "__main__":
     #loading the data for training
+    print("Loading data...")
     train_text, train_targets = load_data("authorship-verification-train-20240408-training")
     X_train = train_text["text"]
     y_train = train_targets["generated"] # text and labels are separated for the training sets in X_train and y_train
@@ -27,5 +28,4 @@ if __name__ == "__main__":
     model.fit(X_train, y_train)
 
     # Save the model
-    dump(model, "/workspaces/nlpbuw-fsu-sose-24-buw-group-17/authorship-verification-bayes/model.joblib")
-
+    dump(model, Path(__file__).parent / "model.joblib")
