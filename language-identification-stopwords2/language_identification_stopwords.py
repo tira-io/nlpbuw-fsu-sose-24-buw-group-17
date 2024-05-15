@@ -6,42 +6,31 @@ from sklearn.metrics import f1_score
 from tira.rest_api_client import Client
 from tira.third_party_integrations import get_output_directory
 from pathlib import Path
+from tqdm import tqdm
 
 if __name__ == "__main__":
-    # Initialize TIRA client
     tira = Client()
 
-    # Load validation data (replaced by test data when run on TIRA)
     text_validation = tira.pd.inputs("nlpbuw-fsu-sose-24", "language-identification-validation-20240429-training")
     targets_validation = tira.pd.truths("nlpbuw-fsu-sose-24", "language-identification-validation-20240429-training")
-
-    # Prepare the text and labels
     texts = text_validation['text']
     true_labels = targets_validation['lang']
 
-    # Train a model on character n-grams
-    vectorizer = TfidfVectorizer(analyzer='char', ngram_range=(1, 5))
-    classifier = LogisticRegression(max_iter=1000, multi_class='multinomial', solver='lbfgs')
+    vectorizer = TfidfVectorizer(analyzer='char', ngram_range=(1, 6), sublinear_tf=True)
+    classifier = LogisticRegression(max_iter=1000, multi_class='auto', solver='liblinear')
 
-    # Create a pipeline
     model = make_pipeline(vectorizer, classifier)
-
-    # Train the model
     model.fit(texts, true_labels)
+    with tqdm(total=len(texts), desc="Predicting languages") as pbar:
+        predicted_labels = []
+        for text in texts:
+            predicted_label = model.predict([text])[0]
+            predicted_labels.append(predicted_label)
+            pbar.update(1)
 
-    # Predict the languages
-    predicted_labels = model.predict(texts)
-
-    # Calculate the F1 score
     f1 = f1_score(true_labels, predicted_labels, average='weighted')
     print(f"F1 Score: {f1:.4f}")
 
-    # Prepare the prediction DataFrame
-    prediction = pd.DataFrame({
-        'id': text_validation['id'],
-        'lang': predicted_labels
-    })
-
-    # Save the prediction
+    prediction = pd.DataFrame({'id': text_validation['id'], 'lang': predicted_labels})
     output_directory = get_output_directory(str(Path(__file__).parent))
     prediction.to_json(Path(output_directory) / "predictions.jsonl", orient="records", lines=True)
