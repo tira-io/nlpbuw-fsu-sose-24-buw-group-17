@@ -1,8 +1,7 @@
 FROM fschlatt/natural-language-processing-exercises:0.0.1
 
 ADD run.py /code/run.py
-ADD model.joblib /code/model.joblib
-ADD best_threshold.txt /code/best_threshold.txt
-ADD model.py /code/model.py
+ADD logistic_regression_model.pkl /code/logistic_regression_model.pkl
+ADD tfidf_vectorizer.pkl /code/tfidf_vectorizer.pkl
 
 ENTRYPOINT [ "python3", "/code/run.py" ]
