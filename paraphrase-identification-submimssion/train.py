@@ -5,6 +5,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import matthews_corrcoef
 from tqdm import tqdm
 import joblib  
+from pathlib import Path
 
 def load_data(tira, dataset_name):
     text = tira.pd.inputs("nlpbuw-fsu-sose-24", dataset_name).set_index("id")
@@ -23,7 +24,7 @@ if __name__ == "__main__":
 
     model = LogisticRegression()
     model.fit(X_train, y_train)
-    joblib.dump(model, 'logistic_regression_model.pkl')
-    joblib.dump(vectorizer, 'tfidf_vectorizer.pkl')
+    joblib.dump(model, Path(__file__).parent / "logistic_regression_model.pkl")
+    joblib.dump(vectorizer, Path(__file__).parent / "tfidf_vectorizer.pkl")
 
     

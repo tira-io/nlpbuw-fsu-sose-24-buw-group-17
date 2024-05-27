@@ -10,8 +10,8 @@ def load_data(tira, dataset_name):
 if __name__ == "__main__":
     
     tira = Client()
-    model = joblib.load('logistic_regression_model.pkl')
-    vectorizer = joblib.load('tfidf_vectorizer.pkl')
+    model = joblib.load(Path(__file__).parent / "logistic_regression_model.pkl")
+    vectorizer = joblib.load(Path(__file__).parent / "tfidf_vectorizer.pkl")
 
     test_df = load_data(tira, "paraphrase-identification-validation-20240515-training")
     test_df['combined'] = test_df['sentence1'] + ' ' + test_df['sentence2']
