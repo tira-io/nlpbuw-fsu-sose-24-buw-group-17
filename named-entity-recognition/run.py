@@ -8,10 +8,10 @@ if __name__ == "__main__":
 
     # loading validation data (automatically replaced by test data when run on tira)
     text_validation = tira.pd.inputs(
-        "nlpbuw-fsu-sose-24", "ner-validation-20240612-training"
+        "nlpbuw-fsu-sose-24", "ner-training-20240612-training"
     )
     targets_validation = tira.pd.truths(
-        "nlpbuw-fsu-sose-24", "ner-validation-20240612-training"
+        "nlpbuw-fsu-sose-24", "ner-training-20240612-training"
     )
 
     # labeling the data
